@@ -20,8 +20,15 @@ add_executable(game
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)
 
+# Copies assets into build directory
+add_custom_command(
+    TARGET game PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:game>/assets/
+)
+
 add_custom_target(run
     COMMAND game
     DEPENDS game
-    WORKING_DIRECTORY ..
+    WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
 )
