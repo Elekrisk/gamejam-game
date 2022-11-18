@@ -23,5 +23,5 @@ target_link_libraries(game sfml-graphics sfml-window sfml-system)
 add_custom_target(run
     COMMAND game
     DEPENDS game
-    WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
+    WORKING_DIRECTORY ..
 )
