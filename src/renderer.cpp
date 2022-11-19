@@ -19,10 +19,6 @@ void Renderer::render(World& world)
         sf::Vector2f pos = static_cast<sf::Vector2f>(ent->get_position());
         sprite.setPosition(pos * 16.0f);
         
-        sf::Texture test{};
-        test.loadFromFile("assets/player.png");
-        sf::Sprite sh{test};
-        
         window.draw(sprite);
     }
     window.display();
