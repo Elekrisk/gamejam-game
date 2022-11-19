@@ -1,6 +1,5 @@
 #pragma once
 
-#include "asset.hpp"
 #include <tuple>
 #include <optional>
 #include <SFML/Graphics.hpp>
