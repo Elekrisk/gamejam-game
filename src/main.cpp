@@ -5,6 +5,7 @@
 #include "world.hpp"
 #include "renderer.hpp"
 #include "player.hpp"
+#include "asset_manager.hpp"
 
 int main()
 {

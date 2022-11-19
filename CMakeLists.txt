@@ -18,6 +18,8 @@ add_executable(game
     src/world.cpp
     src/sprite.hpp
     src/sprite.cpp
+    src/asset_manager.hpp
+    src/asset_manager.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)
