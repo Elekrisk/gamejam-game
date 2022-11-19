@@ -10,6 +10,7 @@ add_executable(game
     src/entity.hpp
     src/entity.cpp
     src/item.hpp
+    src/item.cpp
     src/player.hpp
     src/player.cpp
     src/renderer.hpp
@@ -22,6 +23,10 @@ add_executable(game
     src/asset_manager.cpp
     src/wall.hpp
     src/wall.cpp
+    src/item_entity.hpp
+    src/item_entity.cpp
+    src/geiger.cpp
+    src/geiger.hpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)

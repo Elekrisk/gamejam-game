@@ -6,11 +6,15 @@
 #include "renderer.hpp"
 #include "player.hpp"
 #include "asset_manager.hpp"
+#include "geiger.hpp"
+#include "item_entity.hpp"
 
 int main()
 {
     World world{World::load_level("assets/level1.txt")};
     Player *player = world.get_player();
+    Geiger* geiger = new Geiger{};
+    world.add_entity(new Item_Entity{{3, 3}, geiger});
 
     Renderer renderer{};
 
