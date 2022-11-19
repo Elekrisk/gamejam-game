@@ -75,6 +75,12 @@ int main()
                 {
                     player->put_down(world);
                 }
+                break;
+                case sf::Keyboard::E:
+                {
+                    player->use_item(world);
+                }
+                break;
                 default:
                     break;
                 }

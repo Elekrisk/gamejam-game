@@ -53,3 +53,28 @@ void Player::put_down(World &world)
         world.add_entity(new Item_Entity{position, std::move(item)});
     }
 }
+
+void Player::use_item(World &world)
+{
+    if (item != nullptr)
+    {
+        std::vector<Entity *> entities{};
+        for (Entity *ent : world.get_entities())
+        {
+            if (ent->get_position() != position)
+            {
+                continue;
+            }
+            entities.push_back(ent);
+        }
+
+        if (entities.size() == 0)
+        {
+            item->use_item(nullptr);
+        }
+        else
+        {
+            item->use_item(entities[0]);
+        }
+    }
+}
