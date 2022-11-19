@@ -35,7 +35,7 @@ add_executable(game
     src/key.cpp
 )
 
-target_link_libraries(game sfml-graphics sfml-window sfml-system)
+target_link_libraries(game sfml-graphics sfml-window sfml-system sfml-audio)
 
 # Copies assets into build directory
 add_custom_command(

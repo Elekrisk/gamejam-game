@@ -3,12 +3,15 @@
 #include <tuple>
 #include <optional>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 template <typename T>
 T* load_asset(std::string const& path) = delete;
 
 template <>
 sf::Texture* load_asset<sf::Texture>(std::string const& path);
+template <>
+sf::SoundBuffer* load_asset<sf::SoundBuffer>(std::string const& path);
 
 template <typename... T>
 class AssetManager_
@@ -40,7 +43,7 @@ public:
     }
 };
 
-typedef AssetManager_<sf::Texture> AssetManager;
+typedef AssetManager_<sf::Texture, sf::SoundBuffer> AssetManager;
 
 
 extern AssetManager asset_manager;

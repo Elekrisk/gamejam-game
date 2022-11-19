@@ -2,6 +2,8 @@
 #include "world.hpp"
 #include "asset_manager.hpp"
 #include "item_entity.hpp"
+#include "geiger.hpp"
+#include "item.hpp"
 
 // Player::Player(sf::Vector2i position, sf::Texture &&texture)
 //     : Entity{position, texture}
@@ -76,5 +78,15 @@ void Player::use_item(World &world)
         {
             item->use_item(entities[0]);
         }
+    }
+}
+
+void Player::move_to(sf::Vector2i target)
+{
+    Entity::move_to(target);
+    Geiger* geiger = dynamic_cast<Geiger*>(&*item);
+    if (geiger != nullptr)
+    {
+        geiger->update();
     }
 }
