@@ -29,6 +29,8 @@ add_executable(game
     src/geiger.hpp
     src/mimic.hpp
     src/mimic.cpp
+    src/level_parser.hpp
+    src/level_parser.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)
