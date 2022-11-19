@@ -417,7 +417,7 @@ World World::load_level(std::string const &path)
                 }
                 else if (name == "Geiger")
                 {
-                    world.add_entity(new Item_Entity{{x, y}, new Geiger{}});
+                    world.add_entity(new Item_Entity{{x, y}, std::make_unique<Geiger>()});
                 }
             }
         }
