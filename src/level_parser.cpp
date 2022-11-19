@@ -92,10 +92,31 @@ std::vector<Token> Lexer::lex_all()
 
 Parser::Parser(std::vector<Token> const &tokens) : tokens{tokens}, index{0} {}
 
+bool Parser::parse_value(File::Value &value)
+{
+    if (tokens[index].kind == TokenKind::Integer)
+    {
+        value.kind = File::Value::Kind::Integer;
+        value.int_val = tokens[index++].int_val;
+        return true;
+    }
+    else
+    {
+        File::Object obj;
+        if (parse_object(obj))
+        {
+            value.kind = File::Value::Kind::Object;
+            value.object_val = std::make_unique<File::Object>(std::move(obj));
+            return true;
+        }
+    }
+    return false;
+}
+
 bool Parser::parse_object(File::Object &obj)
 {
     std::string name;
-    std::vector<int> params;
+    std::vector<File::Value> params;
     int start = index;
     if (tokens[index].kind != TokenKind::Word)
     {
@@ -110,12 +131,13 @@ bool Parser::parse_object(File::Object &obj)
     }
     while (tokens[index].kind != TokenKind::RParen)
     {
-        if (tokens[index].kind != TokenKind::Integer)
+        File::Value value;
+        if (!parse_value(value))
         {
             index = start;
             return false;
         }
-        params.push_back(tokens[index++].int_val);
+        params.push_back(std::move(value));
         if (tokens[index].kind == TokenKind::Comma)
         {
             index++;

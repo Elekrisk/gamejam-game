@@ -33,6 +33,8 @@ add_executable(game
     src/level_parser.cpp
     src/key.cpp
     src/key.cpp
+    src/chest.hpp
+    src/chest.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)

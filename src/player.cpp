@@ -2,6 +2,7 @@
 #include "world.hpp"
 #include "asset_manager.hpp"
 #include "item_entity.hpp"
+#include <iostream>
 
 // Player::Player(sf::Vector2i position, sf::Texture &&texture)
 //     : Entity{position, texture}
@@ -70,11 +71,16 @@ void Player::use_item(World &world)
 
         if (entities.size() == 0)
         {
-            item->use_item(nullptr);
+            item->use_item(nullptr, world);
         }
         else
         {
-            item->use_item(entities[0]);
+            item->use_item(entities[0], world);
         }
     }
+}
+
+void Player::destroy_item()
+{
+    item = nullptr;
 }

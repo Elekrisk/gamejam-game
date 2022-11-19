@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 
 enum TokenKind
 {
@@ -52,10 +53,25 @@ public:
 
 struct File
 {
+    struct Object;
+
+    struct Value
+    {
+        enum class Kind
+        {
+            Integer,
+            Object
+        };
+
+        Kind kind;
+        int int_val;
+        std::unique_ptr<File::Object> object_val;
+    };
+
     struct Object
     {
         std::string name;
-        std::vector<int> params;
+        std::vector<Value> params;
     };
 
     struct Property
@@ -82,6 +98,7 @@ class Parser
 public:
     Parser(std::vector<Token> const &tokens);
 
+    bool parse_value(File::Value &value);
     bool parse_object(File::Object &obj);
     bool parse_property(File::Property &prop);
     bool parse_line(File::Part &current_part);

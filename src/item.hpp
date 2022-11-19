@@ -9,5 +9,5 @@ public:
     Item(sf::Texture const* texture);
     virtual ~Item() = default;
 
-    virtual void use_item(Entity* target) = 0;
+    virtual void use_item(Entity* target, World& world) = 0;
 };
