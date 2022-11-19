@@ -1,7 +1,7 @@
 #include "entity.hpp"
 
-Entity::Entity(sf::Vector2i position, sf::Texture &&texture)
-    : Sprite{std::move(texture)}, position{position}
+Entity::Entity(sf::Vector2i position, sf::Texture const* texture)
+    : Sprite{texture}, position{position}
 {
 }
 

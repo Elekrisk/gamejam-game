@@ -7,7 +7,7 @@ class Sprite
 protected:
     sf::Sprite sprite;
 public:
-    Sprite(sf::Texture&& texture);
+    Sprite(sf::Texture const* texture);
     virtual ~Sprite() = default;
 
     sf::Sprite& get_sprite();

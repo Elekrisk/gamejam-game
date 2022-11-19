@@ -6,7 +6,9 @@
 // {
 // }
 
-Player::Player(sf::Vector2i position) : Entity{position, sf::Texture{}}
+sf::Texture const EMPTY{};
+
+Player::Player(sf::Vector2i position) : Entity{position, &EMPTY}
 {
     sf::Texture *texture{asset_manager.load<sf::Texture>("assets/player.png")};
     sprite.setTexture(*texture, true);
