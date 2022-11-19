@@ -28,6 +28,18 @@ void World::add_entity(Entity *entity)
     entities.push_back(entity);
 }
 
+void World::kill_entity(Entity *entity)
+{
+    for (auto it{entities.begin()}; it < entities.end(); ++it)
+    {
+        if (*it == entity)
+        {
+            delete *it;
+            entities.erase(it);
+        }
+    }
+}
+
 std::vector<Entity *> const &World::get_entities() const
 {
     return entities;

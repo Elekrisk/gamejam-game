@@ -66,6 +66,15 @@ int main()
                     }
                 }
                 break;
+                case sf::Keyboard::F:
+                {
+                    player->pick_up(world);
+                }
+                break;
+                case sf::Keyboard::G:
+                {
+                    player->put_down(world);
+                }
                 default:
                     break;
                 }

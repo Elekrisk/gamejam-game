@@ -16,12 +16,16 @@ Player::Player(sf::Vector2i position) : Entity{position, &EMPTY}
     sprite.setTexture(*texture, true);
 }
 
-void Player::pick_up(World& world)
+void Player::pick_up(World &world)
 {
-    std::vector<Item_Entity*> items{};
+    std::vector<Item_Entity *> items{};
     for (Entity *ent : world.get_entities())
     {
-        Item_Entity* item = dynamic_cast<Item_Entity*>(ent);
+        if (ent->get_position() != position)
+        {
+            continue;
+        }
+        Item_Entity *item = dynamic_cast<Item_Entity *>(ent);
         if (item != nullptr)
         {
             items.push_back(item);
@@ -40,4 +44,12 @@ void Player::pick_up(World& world)
 
     item = items[0]->steal_item();
     world.kill_entity(items[0]);
+}
+
+void Player::put_down(World &world)
+{
+    if (item != nullptr)
+    {
+        world.add_entity(new Item_Entity{position, std::move(item)});
+    }
 }
