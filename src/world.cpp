@@ -1,5 +1,7 @@
 #include "world.hpp"
 #include "player.hpp"
+#include "item_entity.hpp"
+#include "geiger.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -412,6 +414,10 @@ World World::load_level(std::string const &path)
                 if (name == "Player")
                 {
                     world.add_entity(new Player{{x, y}});
+                }
+                else if (name == "Geiger")
+                {
+                    world.add_entity(new Item_Entity{{x, y}, std::make_unique<Geiger>()});
                 }
             }
         }
