@@ -3,6 +3,7 @@
 #include "item_entity.hpp"
 #include "geiger.hpp"
 #include "mimic.hpp"
+#include "key.hpp"
 #include "level_parser.hpp"
 
 #include <fstream>
@@ -154,6 +155,14 @@ World World::load_level(std::string const &path)
                 else if (name == "Mimic")
                 {
                     world.add_entity(new Mimic{{x,y}});
+                }
+                else if (name == "Key")
+                {
+                    world.add_entity(new Item_Entity{{x,y}, std::make_unique<Key>()});
+                }
+                else
+                {
+                    throw "what";
                 }
             }
         }
