@@ -1,7 +1,11 @@
 #include "sprite.hpp"
 
-Sprite::Sprite(sf::Texture &&texture) : sprite{sf::Sprite{texture}}
+Sprite::Sprite(sf::Texture const* texture) : sprite{}
 {
+    if (texture != nullptr)
+    {
+        sprite.setTexture(*texture, true);
+    }
 }
 
 sf::Sprite &Sprite::get_sprite()
