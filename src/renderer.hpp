@@ -5,6 +5,7 @@
 
 class Renderer
 {
+    sf::Sprite background;
     sf::RenderWindow window;
 public:
     Renderer();
