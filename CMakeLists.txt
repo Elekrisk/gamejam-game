@@ -27,6 +27,8 @@ add_executable(game
     src/item_entity.cpp
     src/geiger.cpp
     src/geiger.hpp
+    src/mimic.hpp
+    src/mimic.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)

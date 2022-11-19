@@ -2,6 +2,7 @@
 #include "player.hpp"
 #include "item_entity.hpp"
 #include "geiger.hpp"
+#include "mimic.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -418,6 +419,10 @@ World World::load_level(std::string const &path)
                 else if (name == "Geiger")
                 {
                     world.add_entity(new Item_Entity{{x, y}, std::make_unique<Geiger>()});
+                }
+                else if (name == "Mimic")
+                {
+                    world.add_entity(new Mimic{{x,y}});
                 }
             }
         }
