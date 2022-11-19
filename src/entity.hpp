@@ -14,5 +14,5 @@ public:
     virtual ~Entity() override = default;
     void update(World& world);
     sf::Vector2i get_position() const;
-    void move_to(int x, int y);
+    void move_to(sf::Vector2i target);
 };

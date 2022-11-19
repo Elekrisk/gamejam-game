@@ -10,8 +10,8 @@ sf::Vector2i Entity::get_position() const
     return position;
 }
 
-void Entity::move_to(int x, int y)
+void Entity::move_to(sf::Vector2i target)
 {
-    position.x = x;
-    position.y = y;
+    position.x = target.x;
+    position.y = target.y;
 }
