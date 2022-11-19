@@ -24,6 +24,48 @@ std::vector<Entity *> const &World::get_entities() const
     return entities;
 }
 
+bool World::can_move(sf::Vector2i pos, Wall::Direction dir) const
+{
+    sf::Vector2i target{pos};
+    switch (dir)
+    {
+    case Wall::Direction::North:
+        target.y -= 1;
+        break;
+    case Wall::Direction::South:
+        target.y += 1;
+        break;
+    case Wall::Direction::East:
+        target.x += 1;
+        break;
+    case Wall::Direction::West:
+        target.x -= 1;
+        break;
+    }
+    for (Wall const &wall : walls)
+    {
+        Wall::Direction blocking_dir;
+        if (wall.position == pos)
+        {
+            blocking_dir = dir;
+        }
+        else if (wall.position == target)
+        {
+            blocking_dir = opposite(dir);
+        }
+        else
+        {
+            continue;
+        }
+
+        if (wall.direction == blocking_dir)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 enum TokenKind
 {
     Integer,

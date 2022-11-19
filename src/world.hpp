@@ -15,5 +15,7 @@ public:
     void kill_entity(Entity* entity);
     std::vector<Entity*> const& get_entities() const;
 
+    bool can_move(sf::Vector2i pos, Wall::Direction dir) const;
+
     static World load_level(std::string const& path);
 };
