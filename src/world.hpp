@@ -1,10 +1,12 @@
 #pragma once
 
 #include "entity.hpp"
+#include "wall.hpp"
 
 class World
 {
     std::vector<Entity*> entities;
+    std::vector<Wall> walls;
 public:
     
     World();

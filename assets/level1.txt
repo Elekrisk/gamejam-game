@@ -1,0 +1,11 @@
+[Meta]
+Width: 10
+Height: 10
+
+[Walls]
+Wall(0, 0, 0)
+Wall(0, 1, 0)
+Wall(0, 2, 0)
+
+[Entities]
+Player(0, 0)

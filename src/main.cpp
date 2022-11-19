@@ -9,8 +9,7 @@
 
 int main()
 {
-    World world{};
-    world.add_entity(new Player{sf::Vector2i{1, 0}});
+    World world{World::load_level("assets/level1.txt")};
 
     Renderer renderer{};
 

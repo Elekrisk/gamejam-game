@@ -20,13 +20,14 @@ add_executable(game
     src/sprite.cpp
     src/asset_manager.hpp
     src/asset_manager.cpp
+    src/wall.hpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)
 
 # Copies assets into build directory
 add_custom_command(
-    TARGET game PRE_BUILD
+    TARGET game POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_SOURCE_DIR}/assets/ $<TARGET_FILE_DIR:game>/assets/
 )
@@ -35,4 +36,8 @@ add_custom_target(run
     COMMAND game
     DEPENDS game
     WORKING_DIRECTORY ${CMAKE_PROJECT_DIR}
+)
+
+add_custom_target(copy_assets
+    COMMAND cp -r ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:game>
 )
