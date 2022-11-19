@@ -10,6 +10,7 @@
 int main()
 {
     World world{World::load_level("assets/level1.txt")};
+    Player *player = world.get_player();
 
     Renderer renderer{};
 
@@ -24,6 +25,48 @@ int main()
             case event.Closed:
                 window.close();
                 break;
+            case event.KeyPressed:
+                switch (event.key.code)
+                {
+                case sf::Keyboard::W:
+                {
+                    sf::Vector2i pos{player->get_position()};
+                    if (world.can_move(pos, Wall::Direction::North))
+                    {
+                        player->move_to(pos + sf::Vector2i{0, -1});
+                    }
+                }
+                break;
+                case sf::Keyboard::A:
+                {
+                    sf::Vector2i pos{player->get_position()};
+                    if (world.can_move(pos, Wall::Direction::West))
+                    {
+                        player->move_to(pos + sf::Vector2i{-1, 0});
+                    }
+                }
+                break;
+                case sf::Keyboard::S:
+                {
+                    sf::Vector2i pos{player->get_position()};
+                    if (world.can_move(pos, Wall::Direction::South))
+                    {
+                        player->move_to(pos + sf::Vector2i{0, 1});
+                    }
+                }
+                break;
+                case sf::Keyboard::D:
+                {
+                    sf::Vector2i pos{player->get_position()};
+                    if (world.can_move(pos, Wall::Direction::East))
+                    {
+                        player->move_to(pos + sf::Vector2i{1, 0});
+                    }
+                }
+                break;
+                default:
+                    break;
+                }
             default:
                 break;
             }

@@ -21,6 +21,7 @@ add_executable(game
     src/asset_manager.hpp
     src/asset_manager.cpp
     src/wall.hpp
+    src/wall.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)

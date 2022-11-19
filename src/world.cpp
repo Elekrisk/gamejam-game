@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-World::World() : entities{} {}
+World::World() : entities{}, walls{}, player{} {}
 
 World::~World()
 {
@@ -16,12 +16,69 @@ World::~World()
 
 void World::add_entity(Entity *entity)
 {
+    Player* player_entity = dynamic_cast<Player*>(entity);
+    if (player_entity != nullptr)
+    {
+        player = player_entity;
+    }
     entities.push_back(entity);
 }
 
 std::vector<Entity *> const &World::get_entities() const
 {
     return entities;
+}
+
+std::vector<Wall> const &World::get_walls() const
+{
+    return walls;
+}
+
+Player* World::get_player() const
+{
+    return player;
+}
+
+bool World::can_move(sf::Vector2i pos, Wall::Direction dir) const
+{
+    sf::Vector2i target{pos};
+    switch (dir)
+    {
+    case Wall::Direction::North:
+        target.y -= 1;
+        break;
+    case Wall::Direction::South:
+        target.y += 1;
+        break;
+    case Wall::Direction::East:
+        target.x += 1;
+        break;
+    case Wall::Direction::West:
+        target.x -= 1;
+        break;
+    }
+    for (Wall const &wall : walls)
+    {
+        Wall::Direction blocking_dir;
+        if (wall.position == pos)
+        {
+            blocking_dir = dir;
+        }
+        else if (wall.position == target)
+        {
+            blocking_dir = opposite(dir);
+        }
+        else
+        {
+            continue;
+        }
+
+        if (wall.direction == blocking_dir)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 enum TokenKind
@@ -358,6 +415,11 @@ World World::load_level(std::string const &path)
                 }
             }
         }
+    }
+
+    for (int i = 0; i < 4; i ++)
+    {
+        world.walls.push_back(Wall{{10, 10}, static_cast<Wall::Direction>(i)});
     }
     return world;
 }

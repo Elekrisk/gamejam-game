@@ -14,3 +14,5 @@ struct Wall
     sf::Vector2i position;
     Direction direction;
 };
+
+Wall::Direction opposite(Wall::Direction dir);
