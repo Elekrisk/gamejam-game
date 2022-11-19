@@ -9,3 +9,4 @@ Wall(0, 2, 0)
 
 [Entities]
 Player(0, 0)
+Geiger(0, 4)
