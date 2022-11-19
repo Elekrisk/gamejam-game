@@ -31,6 +31,8 @@ add_executable(game
     src/mimic.cpp
     src/level_parser.hpp
     src/level_parser.cpp
+    src/key.cpp
+    src/key.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)
