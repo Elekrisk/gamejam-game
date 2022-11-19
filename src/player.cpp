@@ -80,6 +80,19 @@ void Player::use_item(World &world)
     }
 }
 
+void Player::draw(RenderView &view)
+{
+    sprite.setScale(sf::Vector2f{1.0, 1.0});
+    sprite.setPosition(sf::Vector2f{position});
+    view.draw(sprite);
+    if (item != nullptr)
+    {
+        item->get_sprite().setPosition(sf::Vector2f{position});
+        item->get_sprite().setScale(sf::Vector2f{0.35, 0.35});
+        view.draw(item->get_sprite());
+    }
+}
+
 void Player::destroy_item()
 {
     item = nullptr;

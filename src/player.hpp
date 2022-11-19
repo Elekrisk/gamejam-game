@@ -18,4 +18,6 @@ public:
     void use_item(World& world);
 
     void destroy_item();
+
+    virtual void draw(RenderView& view) override;
 };

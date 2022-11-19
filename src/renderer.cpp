@@ -1,9 +1,7 @@
 #include "renderer.hpp"
 #include "asset_manager.hpp"
 #include <iostream>
-
-constexpr float TILE_SIZE = 16.0;
-constexpr float SCALE = 3.0;
+#include "renderview.hpp"
 
 Renderer::Renderer() : background{}
 {
@@ -26,19 +24,21 @@ void Renderer::render(World &world)
 {
     window.clear();
     window.draw(background);
+    RenderView view{window};
     for (Entity *ent : world.get_entities())
     {
-        sf::Sprite &sprite = ent->get_sprite();
-        sf::Vector2f pos = static_cast<sf::Vector2f>(ent->get_position());
-        sprite.setPosition(pos * TILE_SIZE * SCALE);
-        sprite.setScale({SCALE, SCALE});
+        // sf::Sprite &sprite = ent->get_sprite();
+        // sf::Vector2f pos = static_cast<sf::Vector2f>(ent->get_position());
+        // sprite.setPosition(pos * TILE_SIZE * SCALE);
+        // sprite.setScale({SCALE, SCALE});
 
-        window.draw(sprite);
+        // window.draw(sprite);
+        ent->draw(view);
     }
     for (Wall const &wall : world.get_walls())
     {
         sf::RectangleShape rect{{TILE_SIZE / 8.0, TILE_SIZE}};
-        rect.setPosition((sf::Vector2f{wall.position} * TILE_SIZE + sf::Vector2f{TILE_SIZE / 2.0 + 1.0, TILE_SIZE / 2.0}) * SCALE);
+        rect.setPosition((sf::Vector2f{wall.position} * TILE_SIZE + sf::Vector2f{TILE_SIZE / 2.0, TILE_SIZE / 2.0}) * SCALE);
         rect.setScale({SCALE, SCALE});
         rect.setOrigin({TILE_SIZE / 2.0 + 1.0, TILE_SIZE / 2.0});
         switch (wall.direction)

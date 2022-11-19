@@ -33,6 +33,9 @@ add_executable(game
     src/level_parser.cpp
     src/key.cpp
     src/key.cpp
+    src/renderview.hpp
+    src/renderview.cpp
+    src/render_constants.hpp
     src/chest.hpp
     src/chest.cpp
 )
