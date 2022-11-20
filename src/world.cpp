@@ -9,6 +9,7 @@
 #include "lever.hpp"
 #include "gate.hpp"
 #include "goal.hpp"
+#include "level_button.hpp"
 #include "level_parser.hpp"
 #include "render_constants.hpp"
 
@@ -32,6 +33,25 @@ World::World(World &&world)
         ent->update_world_pointer(this);
     }
 }
+
+// World &World::operator=(World &&world)
+// {
+//     this->~World();
+
+//     entities = std::move(world.entities);
+//     walls = std::move(world.walls);
+//     player = std::move(world.player);
+//     camera = std::move(world.camera);
+//     size = std::move(world.size);
+//     new_state = std::move(world.new_state);
+//     replace_this = std::move(world.replace_this);
+//     exit = std::move(world.exit);
+//     for (Entity *ent : entities)
+//     {
+//         ent->update_world_pointer(this);
+//     }
+//     return *this;
+// }
 
 World::~World()
 {
@@ -81,6 +101,11 @@ Player *World::get_player() const
 Camera &World::get_camera()
 {
     return camera;
+}
+
+void World::push_state(std::unique_ptr<State> state, bool replace_this)
+{
+    new_state = std::move(state);
 }
 
 sf::Vector2i World::get_size() const
@@ -275,6 +300,10 @@ Entity *create_object(World *world, File::Object &obj)
     else if (name == "Goal")
     {
         return new Goal{world, {x, y}};
+    }
+    else if (name == "LevelButton")
+    {
+        return new LevelButton{world, {x, y}, obj.params[2].int_val};
     }
     else
     {

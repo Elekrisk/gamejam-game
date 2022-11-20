@@ -52,6 +52,8 @@ add_executable(game
     src/goal.cpp
     src/state_stack.hpp
     src/state_stack.cpp
+    src/level_button.hpp
+    src/level_button.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system sfml-audio)

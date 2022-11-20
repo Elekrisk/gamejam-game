@@ -31,6 +31,9 @@ public:
     Player *get_player() const;
     Camera &get_camera();
 
+    void push_state(std::unique_ptr<State> state, bool replace_this);
+    void do_exit();
+
     sf::Vector2i get_size() const;
 
     bool can_move(sf::Vector2i pos, Wall::Direction dir) const;

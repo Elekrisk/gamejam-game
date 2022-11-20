@@ -11,3 +11,5 @@ Diagram: [
 
 [Entities]
 Player(0, 0)
+
+LevelButton(1, 1, 1)

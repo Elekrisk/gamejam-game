@@ -14,7 +14,7 @@
 int main()
 {
     StateStack stack{};
-    PushState{std::make_unique<World>(World::load_level("assets/level1.txt"))}.execute(stack);
+    PushState{std::make_unique<World>(World::load_level("assets/main_menu.txt"))}.execute(stack);
 
     Renderer renderer{};
     stack.run(renderer);
