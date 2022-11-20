@@ -61,28 +61,22 @@ void Player::interact(World &world)
     std::vector<Entity *> entities{};
     for (Entity *ent : world.get_entities())
     {
-        if (ent->get_position() != position)
+        if (ent->get_position() != position || dynamic_cast<Player*>(ent) != nullptr)
         {
             continue;
         }
         entities.push_back(ent);
     }
 
-    if (entities.size() == 0)
+    for (Entity *ent : entities)
     {
-        return;
-    }
-    else
-    {
-        entities[0]->interact(item, world);
+        ent->interact(item, world);
     }
 }
 
 void Player::draw(RenderView &view)
 {
-    sprite.setScale(sf::Vector2f{1.0, 1.0});
-    sprite.setPosition(sf::Vector2f{position});
-    view.draw(sprite);
+    Entity::draw(view);
     if (item != nullptr)
     {
         item->get_sprite().setPosition(sf::Vector2f{position});

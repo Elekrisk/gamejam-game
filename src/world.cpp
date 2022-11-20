@@ -5,12 +5,16 @@
 #include "mimic.hpp"
 #include "chest.hpp"
 #include "key.hpp"
+#include "treasure.hpp"
+#include "lever.hpp"
+#include "gate.hpp"
 #include "level_parser.hpp"
+#include "render_constants.hpp"
 
 #include <fstream>
 #include <sstream>
 
-World::World() : entities{}, walls{}, player{} {}
+World::World() : entities{}, walls{}, player{}, camera{} {}
 
 World::~World()
 {
@@ -57,6 +61,16 @@ Player *World::get_player() const
     return player;
 }
 
+Camera &World::get_camera()
+{
+    return camera;
+}
+
+sf::Vector2i World::get_size() const
+{
+    return size;
+}
+
 bool World::can_move(sf::Vector2i pos, Wall::Direction dir) const
 {
     sf::Vector2i target{pos};
@@ -96,6 +110,35 @@ bool World::can_move(sf::Vector2i pos, Wall::Direction dir) const
             return false;
         }
     }
+    for (Entity *ent : entities)
+    {
+        sf::Vector2i ent_pos = ent->get_position();
+        if (ent_pos == pos || ent_pos == target)
+        {
+            Gate *gate = dynamic_cast<Gate *>(ent);
+            if (gate != nullptr && !gate->is_open())
+            {
+                Wall::Direction blocking_dir;
+                if (ent_pos == pos)
+                {
+                    blocking_dir = dir;
+                }
+                else if (ent_pos == target)
+                {
+                    blocking_dir = opposite(dir);
+                }
+                else
+                {
+                    throw 0;
+                }
+
+                if (gate->get_direction() == blocking_dir)
+                {
+                    return false;
+                }
+            }
+        }
+    }
     return true;
 }
 
@@ -110,7 +153,12 @@ std::unique_ptr<Item> create_item(File::Object &obj)
     {
         return std::make_unique<Geiger>();
     }
-    else {
+    else if (name == "Treasure")
+    {
+        return std::make_unique<Treasure>();
+    }
+    else
+    {
         throw "what";
     }
 }
@@ -143,6 +191,65 @@ Entity *create_object(File::Object &obj)
     else if (name == "Chest")
     {
         return new Chest{{x, y}, create_item(*obj.params[2].object_val)};
+    }
+    else if (name == "Lever")
+    {
+        return new Lever({x, y}, obj.params[2].int_val);
+    }
+    else if (name == "Gate")
+    {
+        Wall::Direction dir;
+        if (obj.params[2].kind == File::Value::Kind::Integer)
+        {
+            dir = static_cast<Wall::Direction>(obj.params[2].int_val);
+        }
+        else
+        {
+            std::string &str = obj.params[2].object_val->name;
+            if (str == "North")
+            {
+                dir = Wall::Direction::North;
+            }
+            else if (str == "East")
+            {
+                dir = Wall::Direction::East;
+            }
+            else if (str == "South")
+            {
+                dir = Wall::Direction::South;
+            }
+            else if (str == "West")
+            {
+                dir = Wall::Direction::West;
+            }
+            else
+            {
+                throw "what";
+            }
+        }
+        int circuit_id = obj.params[3].int_val;
+        bool open;
+        if (obj.params[4].kind == File::Value::Kind::Integer)
+        {
+            open = obj.params[4].int_val != 0;
+        }
+        else
+        {
+            std::string &str = obj.params[4].object_val->name;
+            if (str == "Open")
+            {
+                open = true;
+            }
+            else if (str == "Closed")
+            {
+                open = false;
+            }
+            else
+            {
+                throw "what";
+            }
+        }
+        return new Gate{{x, y}, dir, circuit_id, open};
     }
     else
     {
@@ -178,12 +285,13 @@ World World::load_level(std::string const &path)
         {
             width = part.properties["Width"].int_val;
             height = part.properties["Height"].int_val;
+            world.size = {width, height};
         }
         if (part.title == "Walls")
         {
             if (part.properties.contains("Diagram"))
             {
-                std::vector<File::Value>& list{part.properties.at("Diagram").list_val};
+                std::vector<File::Value> &list{part.properties.at("Diagram").list_val};
                 for (int i{0}; i < list.size(); ++i)
                 {
                     int x = i % width;
@@ -226,5 +334,20 @@ World World::load_level(std::string const &path)
             }
         }
     }
+
+    world.camera.position.x = width / 2.0;
+    world.camera.position.y = height / 2.0;
+    float tw = WIDTH / TILE_SIZE;
+    float th = HEIGHT / TILE_SIZE;
+    float aspect = static_cast<float>(WIDTH) / HEIGHT;
+    if (width * aspect > height * aspect)
+    {
+        world.camera.zoom = tw / width;
+    }
+    else
+    {
+        world.camera.zoom = th / height;
+    }
+
     return world;
 }

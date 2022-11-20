@@ -6,9 +6,9 @@ Height: 5
 
 Diagram: [
    12 8 9 8 9
-    4 0 1 0 1
+    4 0 3 0 1
     4 0 0 0 1
-    4 0 1 0 1
+    4 0 9 0 1 
     6 2 3 2 3
 ]
 
@@ -16,7 +16,11 @@ Diagram: [
 
 [Entities]
 Mimic(4, 3)
-Chest(4, 1, Geiger())
+Chest(4, 1, Treasure())
 Player(0, 3)
 Geiger(1, 3)
 Key(1, 1)
+
+Lever(2, 2, 0)
+Gate(2, 2, East(), 0, Closed())
+Gate(2, 2, West(), 0, Open())

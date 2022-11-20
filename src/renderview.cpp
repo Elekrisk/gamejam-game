@@ -1,3 +1,3 @@
 #include "renderview.hpp"
 
-RenderView::RenderView(sf::RenderWindow &window) : window{window} {}
+RenderView::RenderView(sf::RenderWindow &window, Camera const &camera) : window{window}, camera{camera} {}

@@ -21,4 +21,6 @@ public:
     virtual void draw(RenderView& window);
 
     virtual void interact(std::unique_ptr<Item>& item, World& world);
+
+    virtual void toggle_circuit(int id);
 };

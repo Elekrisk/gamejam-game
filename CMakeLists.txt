@@ -38,6 +38,14 @@ add_executable(game
     src/render_constants.hpp
     src/chest.hpp
     src/chest.cpp
+    src/camera.hpp
+    src/camera.cpp
+    src/treasure.hpp
+    src/treasure.cpp
+    src/lever.hpp
+    src/lever.cpp
+    src/gate.hpp
+    src/gate.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system sfml-audio)
