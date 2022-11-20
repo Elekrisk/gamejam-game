@@ -50,6 +50,8 @@ add_executable(game
     src/gate.cpp
     src/goal.hpp
     src/goal.cpp
+    src/state_stack.hpp
+    src/state_stack.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system sfml-audio)

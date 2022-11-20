@@ -2,6 +2,7 @@
 #include "asset_manager.hpp"
 #include <iostream>
 #include "renderview.hpp"
+#include "world.hpp"
 
 Renderer::Renderer() : background{}
 {

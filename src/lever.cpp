@@ -4,12 +4,14 @@
 
 #include <iostream>
 
-Lever::Lever(World* world, sf::Vector2i position, int circuit_id) : Entity{world, position, asset_manager.load<sf::Texture>("assets/lever_right.png")}, circuit_id{circuit_id} {}
+Lever::Lever(World* world, sf::Vector2i position, int circuit_id) : Entity{world, position, asset_manager.load<sf::Texture>("assets/lever_right.png")}, circuit_id{circuit_id} {
+    obstructs = true;
+}
 
-void Lever::interact(std::unique_ptr<Item> &, World &world)
+void Lever::interact(std::unique_ptr<Item> &)
 {
     std::cout << "Lever interaction\n";
-    for (Entity *ent : world.get_entities())
+    for (Entity *ent : world->get_entities())
     {
         ent->toggle_circuit(circuit_id);
     }

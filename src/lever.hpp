@@ -8,5 +8,5 @@ class Lever : public Entity
 public:
     Lever(World* world, sf::Vector2i position, int circuit_id);
 
-    virtual void interact(std::unique_ptr<Item>&, World& world) override;
+    virtual void interact(std::unique_ptr<Item>&) override;
 };

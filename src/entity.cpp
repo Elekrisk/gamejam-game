@@ -3,6 +3,7 @@
 Entity::Entity(World* world, sf::Vector2i position, sf::Texture const *texture)
     : Sprite{texture}, world{world}, position{position}
 {
+    obstructs = false;
 }
 
 sf::Vector2i Entity::get_position() const
@@ -28,10 +29,21 @@ void Entity::draw(RenderView &view)
     view.draw(sprite);
 }
 
-void Entity::interact(std::unique_ptr<Item> &item, World &world)
+void Entity::interact(std::unique_ptr<Item> &)
 {
 }
 
 void Entity::toggle_circuit(int id)
 {
+}
+
+bool Entity::does_obstruct() const
+{
+    return obstructs;
+}
+
+
+void Entity::set_obstructs(bool obstructs)
+{
+    this->obstructs = obstructs;
 }

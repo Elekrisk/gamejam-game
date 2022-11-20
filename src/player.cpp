@@ -103,7 +103,7 @@ void Player::interact()
 
     for (Entity *ent : entities)
     {
-        ent->interact(item, *world);
+        ent->interact(item);
     }
 }
 

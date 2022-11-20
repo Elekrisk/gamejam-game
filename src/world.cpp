@@ -15,13 +15,17 @@
 #include <fstream>
 #include <sstream>
 
-World::World() : entities{}, walls{}, player{}, camera{} {}
+World::World() : entities{}, walls{}, player{}, camera{}, size{}, new_state{}, exit{}, replace_this{} {}
 
 World::World(World &&world)
     : entities{std::move(world.entities)},
       walls{std::move(world.walls)},
       player{std::move(world.player)},
-      camera{std::move(world.camera)}
+      camera{std::move(world.camera)},
+      size{std::move(world.size)},
+      new_state{std::move(world.new_state)},
+      replace_this{std::move(world.replace_this)},
+      exit{std::move(world.exit)}
 {
     for (Entity *ent : entities)
     {
@@ -128,6 +132,10 @@ bool World::can_move(sf::Vector2i pos, Wall::Direction dir) const
         sf::Vector2i ent_pos = ent->get_position();
         if (ent_pos == pos || ent_pos == target)
         {
+            if (ent_pos == target && ent->does_obstruct())
+            {
+                return false;
+            }
             Gate *gate = dynamic_cast<Gate *>(ent);
             if (gate != nullptr && !gate->is_open())
             {
@@ -273,7 +281,7 @@ Entity *create_object(World *world, File::Object &obj)
         throw "what";
     }
 }
-Entity *create_object(World* world, File::Object &&obj)
+Entity *create_object(World *world, File::Object &&obj)
 {
     return create_object(world, obj);
 }
@@ -367,4 +375,103 @@ World World::load_level(std::string const &path)
     }
 
     return world;
+}
+
+std::vector<std::unique_ptr<StateTransition>> World::run(Renderer &renderer)
+{
+    sf::RenderWindow &window = renderer.get_window();
+    while (window.isOpen())
+    {
+        sf::Event event;
+        if (window.pollEvent(event))
+        {
+            switch (event.type)
+            {
+            case event.Closed:
+                window.close();
+                break;
+            case event.KeyPressed:
+                switch (event.key.code)
+                {
+                case sf::Keyboard::W:
+                {
+                    sf::Vector2i pos{player->get_position()};
+                    if (can_move(pos, Wall::Direction::North))
+                    {
+                        player->move_to(pos + sf::Vector2i{0, -1});
+                    }
+                }
+                break;
+                case sf::Keyboard::A:
+                {
+                    sf::Vector2i pos{player->get_position()};
+                    if (can_move(pos, Wall::Direction::West))
+                    {
+                        player->move_to(pos + sf::Vector2i{-1, 0});
+                    }
+                }
+                break;
+                case sf::Keyboard::S:
+                {
+                    sf::Vector2i pos{player->get_position()};
+                    if (can_move(pos, Wall::Direction::South))
+                    {
+                        player->move_to(pos + sf::Vector2i{0, 1});
+                    }
+                }
+                break;
+                case sf::Keyboard::D:
+                {
+                    sf::Vector2i pos{player->get_position()};
+                    if (can_move(pos, Wall::Direction::East))
+                    {
+                        player->move_to(pos + sf::Vector2i{1, 0});
+                    }
+                }
+                break;
+                case sf::Keyboard::F:
+                {
+                    player->pick_up();
+                }
+                break;
+                case sf::Keyboard::G:
+                {
+                    player->put_down();
+                }
+                break;
+                case sf::Keyboard::E:
+                {
+                    player->interact();
+                }
+                break;
+                default:
+                    break;
+                }
+            default:
+                break;
+            }
+        }
+
+        if (exit)
+        {
+            std::vector<std::unique_ptr<StateTransition>> ret;
+            ret.emplace_back(std::make_unique<PopState>());
+            return ret;
+        }
+        if (new_state != nullptr)
+        {
+            std::vector<std::unique_ptr<StateTransition>> ret;
+            if (replace_this)
+            {
+                ret.emplace_back(std::make_unique<PopState>());
+            }
+            ret.emplace_back(std::make_unique<PushState>(std::move(new_state)));
+            return ret;
+        }
+
+        renderer.render(*this);
+    }
+    std::vector<std::unique_ptr<StateTransition>> ret;
+    ret.emplace_back(std::make_unique<PopState>());
+    return ret;
 }

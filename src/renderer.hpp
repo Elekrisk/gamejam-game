@@ -1,7 +1,8 @@
 #pragma once
 
 #include <SFML/Window.hpp>
-#include "world.hpp"
+#include <SFML/Graphics.hpp>
+class World;
 
 
 class Renderer

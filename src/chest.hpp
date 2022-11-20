@@ -11,7 +11,7 @@ class Chest : public Entity
 public:
     Chest(World* world, sf::Vector2i position, std::unique_ptr<Item> contents);
     
-    void open(World& world);
+    void open();
 
-    virtual void interact(std::unique_ptr<Item>& item, World& world) override;
+    virtual void interact(std::unique_ptr<Item>& item) override;
 };
