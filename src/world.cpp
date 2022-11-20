@@ -6,11 +6,12 @@
 #include "chest.hpp"
 #include "key.hpp"
 #include "level_parser.hpp"
+#include "render_constants.hpp"
 
 #include <fstream>
 #include <sstream>
 
-World::World() : entities{}, walls{}, player{} {}
+World::World() : entities{}, walls{}, player{}, camera{} {}
 
 World::~World()
 {
@@ -55,6 +56,16 @@ std::vector<Wall> const &World::get_walls() const
 Player *World::get_player() const
 {
     return player;
+}
+
+Camera &World::get_camera()
+{
+    return camera;
+}
+
+sf::Vector2i World::get_size() const
+{
+    return size;
 }
 
 bool World::can_move(sf::Vector2i pos, Wall::Direction dir) const
@@ -178,12 +189,13 @@ World World::load_level(std::string const &path)
         {
             width = part.properties["Width"].int_val;
             height = part.properties["Height"].int_val;
+            world.size = {width, height};
         }
         if (part.title == "Walls")
         {
             if (part.properties.contains("Diagram"))
             {
-                std::vector<File::Value>& list{part.properties.at("Diagram").list_val};
+                std::vector<File::Value> &list{part.properties.at("Diagram").list_val};
                 for (int i{0}; i < list.size(); ++i)
                 {
                     int x = i % width;
@@ -226,5 +238,20 @@ World World::load_level(std::string const &path)
             }
         }
     }
+
+    world.camera.position.x = width / 2.0;
+    world.camera.position.y = height / 2.0;
+    float tw = WIDTH / TILE_SIZE;
+    float th = HEIGHT / TILE_SIZE;
+    float aspect = static_cast<float>(WIDTH) / HEIGHT;
+    if (width * aspect > height * aspect)
+    {
+        world.camera.zoom = tw / width;
+    }
+    else
+    {
+        world.camera.zoom = th / height;
+    }
+
     return world;
 }

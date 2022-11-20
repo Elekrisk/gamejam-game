@@ -79,9 +79,7 @@ void Player::interact(World &world)
 
 void Player::draw(RenderView &view)
 {
-    sprite.setScale(sf::Vector2f{1.0, 1.0});
-    sprite.setPosition(sf::Vector2f{position});
-    view.draw(sprite);
+    Entity::draw(view);
     if (item != nullptr)
     {
         item->get_sprite().setPosition(sf::Vector2f{position});
