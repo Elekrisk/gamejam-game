@@ -3,6 +3,7 @@
 #include "item_entity.hpp"
 #include "geiger.hpp"
 #include "mimic.hpp"
+#include "chest.hpp"
 #include "key.hpp"
 #include "level_parser.hpp"
 
@@ -21,7 +22,7 @@ World::~World()
 
 void World::add_entity(Entity *entity)
 {
-    Player* player_entity = dynamic_cast<Player*>(entity);
+    Player *player_entity = dynamic_cast<Player *>(entity);
     if (player_entity != nullptr)
     {
         player = player_entity;
@@ -51,7 +52,7 @@ std::vector<Wall> const &World::get_walls() const
     return walls;
 }
 
-Player* World::get_player() const
+Player *World::get_player() const
 {
     return player;
 }
@@ -98,6 +99,61 @@ bool World::can_move(sf::Vector2i pos, Wall::Direction dir) const
     return true;
 }
 
+std::unique_ptr<Item> create_item(File::Object &obj)
+{
+    std::string &name = obj.name;
+    if (name == "Key")
+    {
+        return std::make_unique<Key>();
+    }
+    else if (name == "Geiger")
+    {
+        return std::make_unique<Geiger>();
+    }
+    else {
+        throw "what";
+    }
+}
+
+std::unique_ptr<Item> create_item(File::Object &&obj)
+{
+    return create_item(obj);
+}
+Entity *create_object(File::Object &obj)
+{
+    int x = obj.params[0].int_val;
+    int y = obj.params[1].int_val;
+    std::string &name = obj.name;
+    if (name == "Player")
+    {
+        return new Player{{x, y}};
+    }
+    else if (name == "Geiger")
+    {
+        return new Item_Entity{{x, y}, create_item({"Geiger", {}})};
+    }
+    else if (name == "Mimic")
+    {
+        return new Mimic{{x, y}};
+    }
+    else if (name == "Key")
+    {
+        return new Item_Entity{{x, y}, create_item({"Key", {}})};
+    }
+    else if (name == "Chest")
+    {
+        return new Chest{{x, y}, create_item(*obj.params[2].object_val)};
+    }
+    else
+    {
+        throw "what";
+    }
+}
+Entity *create_object(File::Object &&obj)
+{
+    return create_object(obj);
+}
+
 World World::load_level(std::string const &path)
 {
     std::ifstream t(path);
@@ -120,16 +176,41 @@ World World::load_level(std::string const &path)
     {
         if (part.title == "Meta")
         {
-            width = part.properties["Width"];
-            height = part.properties["Height"];
+            width = part.properties["Width"].int_val;
+            height = part.properties["Height"].int_val;
         }
         if (part.title == "Walls")
         {
+            if (part.properties.contains("Diagram"))
+            {
+                std::vector<File::Value>& list{part.properties.at("Diagram").list_val};
+                for (int i{0}; i < list.size(); ++i)
+                {
+                    int x = i % width;
+                    int y = i / width;
+                    if (list[i].int_val & 1)
+                    {
+                        world.walls.push_back(Wall{{x, y}, Wall::Direction::East});
+                    }
+                    if (list[i].int_val & 2)
+                    {
+                        world.walls.push_back(Wall{{x, y}, Wall::Direction::South});
+                    }
+                    if (list[i].int_val & 4)
+                    {
+                        world.walls.push_back(Wall{{x, y}, Wall::Direction::West});
+                    }
+                    if (list[i].int_val & 8)
+                    {
+                        world.walls.push_back(Wall{{x, y}, Wall::Direction::North});
+                    }
+                }
+            }
             for (File::Object &obj : part.objects)
             {
                 if (obj.name == "Wall")
                 {
-                    world.walls.push_back(Wall{{obj.params[0], obj.params[1]}, static_cast<Wall::Direction>(obj.params[2])});
+                    world.walls.push_back(Wall{{obj.params[0].int_val, obj.params[1].int_val}, static_cast<Wall::Direction>(obj.params[2].int_val)});
                 }
                 else
                 {
@@ -141,36 +222,9 @@ World World::load_level(std::string const &path)
         {
             for (File::Object &obj : part.objects)
             {
-                int x = obj.params[0];
-                int y = obj.params[1];
-                std::string &name = obj.name;
-                if (name == "Player")
-                {
-                    world.add_entity(new Player{{x, y}});
-                }
-                else if (name == "Geiger")
-                {
-                    world.add_entity(new Item_Entity{{x, y}, std::make_unique<Geiger>()});
-                }
-                else if (name == "Mimic")
-                {
-                    world.add_entity(new Mimic{{x,y}});
-                }
-                else if (name == "Key")
-                {
-                    world.add_entity(new Item_Entity{{x,y}, std::make_unique<Key>()});
-                }
-                else
-                {
-                    throw "what";
-                }
+                world.add_entity(create_object(obj));
             }
         }
-    }
-
-    for (int i = 0; i < 4; i ++)
-    {
-        world.walls.push_back(Wall{{10, 10}, static_cast<Wall::Direction>(i)});
     }
     return world;
 }

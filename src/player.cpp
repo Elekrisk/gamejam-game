@@ -56,28 +56,38 @@ void Player::put_down(World &world)
     }
 }
 
-void Player::use_item(World &world)
+void Player::interact(World &world)
 {
+    std::vector<Entity *> entities{};
+    for (Entity *ent : world.get_entities())
+    {
+        if (ent->get_position() != position)
+        {
+            continue;
+        }
+        entities.push_back(ent);
+    }
+
+    if (entities.size() == 0)
+    {
+        return;
+    }
+    else
+    {
+        entities[0]->interact(item, world);
+    }
+}
+
+void Player::draw(RenderView &view)
+{
+    sprite.setScale(sf::Vector2f{1.0, 1.0});
+    sprite.setPosition(sf::Vector2f{position});
+    view.draw(sprite);
     if (item != nullptr)
     {
-        std::vector<Entity *> entities{};
-        for (Entity *ent : world.get_entities())
-        {
-            if (ent->get_position() != position)
-            {
-                continue;
-            }
-            entities.push_back(ent);
-        }
-
-        if (entities.size() == 0)
-        {
-            item->use_item(nullptr);
-        }
-        else
-        {
-            item->use_item(entities[0]);
-        }
+        item->get_sprite().setPosition(sf::Vector2f{position});
+        item->get_sprite().setScale(sf::Vector2f{0.35, 0.35});
+        view.draw(item->get_sprite());
     }
 }
 
@@ -89,4 +99,8 @@ void Player::move_to(sf::Vector2i target)
     {
         geiger->update();
     }
+}
+void Player::destroy_item()
+{
+    item = nullptr;
 }

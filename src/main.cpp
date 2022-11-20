@@ -78,7 +78,7 @@ int main()
                 break;
                 case sf::Keyboard::E:
                 {
-                    player->use_item(world);
+                    player->interact(world);
                 }
                 break;
                 default:

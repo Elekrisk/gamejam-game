@@ -1,6 +1,8 @@
 #pragma once
 
 #include "sprite.hpp"
+#include "renderview.hpp"
+#include "item.hpp"
 
 class World;
 
@@ -15,4 +17,8 @@ public:
     void update(World& world);
     sf::Vector2i get_position() const;
     virtual void move_to(sf::Vector2i target);
+
+    virtual void draw(RenderView& window);
+
+    virtual void interact(std::unique_ptr<Item>& item, World& world);
 };

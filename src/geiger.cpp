@@ -10,7 +10,7 @@ Geiger::Geiger()
     count.play();
 }
 
-void Geiger::use_item(Entity* target) {}
+
 void Geiger::update()
 {
     count.setPitch(get_closest());

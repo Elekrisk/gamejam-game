@@ -7,7 +7,5 @@ class Geiger : public Item
     float get_closest();
 public:
     Geiger();
-
-    virtual void use_item(Entity* target) override;
     void update();
 };
