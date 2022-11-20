@@ -42,6 +42,8 @@ add_executable(game
     src/camera.cpp
     src/treasure.hpp
     src/treasure.cpp
+    src/lever.hpp
+    src/lever.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)

@@ -6,6 +6,7 @@
 #include "chest.hpp"
 #include "key.hpp"
 #include "treasure.hpp"
+#include "lever.hpp"
 #include "level_parser.hpp"
 #include "render_constants.hpp"
 
@@ -160,6 +161,10 @@ Entity *create_object(File::Object &obj)
     else if (name == "Chest")
     {
         return new Chest{{x, y}, create_item(*obj.params[2].object_val)};
+    }
+    else if (name == "Lever")
+    {
+        return new Lever({x, y}, obj.params[2].int_val);
     }
     else
     {
