@@ -7,6 +7,7 @@
 #include "key.hpp"
 #include "treasure.hpp"
 #include "lever.hpp"
+#include "gate.hpp"
 #include "level_parser.hpp"
 #include "render_constants.hpp"
 
@@ -109,6 +110,35 @@ bool World::can_move(sf::Vector2i pos, Wall::Direction dir) const
             return false;
         }
     }
+    for (Entity *ent : entities)
+    {
+        sf::Vector2i ent_pos = ent->get_position();
+        if (ent_pos == pos || ent_pos == target)
+        {
+            Gate *gate = dynamic_cast<Gate *>(ent);
+            if (gate != nullptr && !gate->is_open())
+            {
+                Wall::Direction blocking_dir;
+                if (ent_pos == pos)
+                {
+                    blocking_dir = dir;
+                }
+                else if (ent_pos == target)
+                {
+                    blocking_dir = opposite(dir);
+                }
+                else
+                {
+                    throw 0;
+                }
+
+                if (gate->get_direction() == blocking_dir)
+                {
+                    return false;
+                }
+            }
+        }
+    }
     return true;
 }
 
@@ -165,6 +195,61 @@ Entity *create_object(File::Object &obj)
     else if (name == "Lever")
     {
         return new Lever({x, y}, obj.params[2].int_val);
+    }
+    else if (name == "Gate")
+    {
+        Wall::Direction dir;
+        if (obj.params[2].kind == File::Value::Kind::Integer)
+        {
+            dir = static_cast<Wall::Direction>(obj.params[2].int_val);
+        }
+        else
+        {
+            std::string &str = obj.params[2].object_val->name;
+            if (str == "North")
+            {
+                dir = Wall::Direction::North;
+            }
+            else if (str == "East")
+            {
+                dir = Wall::Direction::East;
+            }
+            else if (str == "South")
+            {
+                dir = Wall::Direction::South;
+            }
+            else if (str == "West")
+            {
+                dir = Wall::Direction::West;
+            }
+            else
+            {
+                throw "what";
+            }
+        }
+        int circuit_id = obj.params[3].int_val;
+        bool open;
+        if (obj.params[4].kind == File::Value::Kind::Integer)
+        {
+            open = obj.params[4].int_val != 0;
+        }
+        else
+        {
+            std::string &str = obj.params[4].object_val->name;
+            if (str == "Open")
+            {
+                open = true;
+            }
+            else if (str == "Closed")
+            {
+                open = false;
+            }
+            else
+            {
+                throw "what";
+            }
+        }
+        return new Gate{{x, y}, dir, circuit_id, open};
     }
     else
     {

@@ -22,3 +22,5 @@ Geiger(1, 3)
 Key(1, 1)
 
 Lever(2, 2, 0)
+Gate(2, 2, East(), 0, Closed())
+Gate(2, 2, West(), 0, Open())
