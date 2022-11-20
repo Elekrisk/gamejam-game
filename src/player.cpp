@@ -33,10 +33,12 @@ float Player::closest_mimic()
 
 sf::Texture const EMPTY{};
 
-Player::Player(World *world, sf::Vector2i position) : Entity{world, position, &EMPTY}
+Player::Player(World *world, sf::Vector2i position) : Entity{world, position, &EMPTY}, indicator{}
 {
     sf::Texture *texture{asset_manager.load<sf::Texture>("assets/player.png")};
+    sf::Texture *indicator_texture{asset_manager.load<sf::Texture>("assets/indicator.png")};
     sprite.setTexture(*texture, true);
+    indicator.setTexture(*indicator_texture, true);
 }
 
 void Player::pick_up()
@@ -94,7 +96,7 @@ void Player::interact()
     std::vector<Entity *> entities{};
     for (Entity *ent : world->get_entities())
     {
-        if (ent->get_position() != position || dynamic_cast<Player *>(ent) != nullptr)
+        if (ent->get_position() != position + direction || dynamic_cast<Player *>(ent) != nullptr)
         {
             continue;
         }
@@ -110,6 +112,9 @@ void Player::interact()
 void Player::draw(RenderView &view)
 {
     Entity::draw(view);
+
+    indicator.setPosition(sf::Vector2f{position+direction});
+    view.draw(indicator);
     if (item != nullptr)
     {
         item->get_sprite().setPosition(sf::Vector2f{position});

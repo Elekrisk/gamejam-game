@@ -11,6 +11,8 @@ class Player : public Entity
 
     float closest_mimic();
 
+    sf::Sprite indicator;
+
 public:
     Player(World *world, sf::Vector2i position);
     ~Player() = default;
@@ -23,4 +25,7 @@ public:
 
     virtual void draw(RenderView& view) override;
     void move_to(sf::Vector2i target) override;
+
+
+    sf::Vector2i direction; // Public för det blir enklare, fixa sen om du vill
 };

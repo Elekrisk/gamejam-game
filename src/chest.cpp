@@ -16,7 +16,7 @@ void Chest::open()
 {
     if (!open_)
     {
-        world->add_entity(new Item_Entity{this->world, position, std::move(contents)});
+        world->add_entity(new Item_Entity{this->world, world->get_player()->get_position(), std::move(contents)});
         sprite.setTexture(*asset_manager.load<sf::Texture>("assets/chest_open.png"), true);
         open_ = true;
     }

@@ -400,6 +400,7 @@ std::vector<std::unique_ptr<StateTransition>> World::run(Renderer &renderer)
                     {
                         player->move_to(pos + sf::Vector2i{0, -1});
                     }
+                    player->direction = sf::Vector2i{0, -1};
                 }
                 break;
                 case sf::Keyboard::A:
@@ -409,6 +410,7 @@ std::vector<std::unique_ptr<StateTransition>> World::run(Renderer &renderer)
                     {
                         player->move_to(pos + sf::Vector2i{-1, 0});
                     }
+                    player->direction = sf::Vector2i{-1, 0};
                 }
                 break;
                 case sf::Keyboard::S:
@@ -418,6 +420,7 @@ std::vector<std::unique_ptr<StateTransition>> World::run(Renderer &renderer)
                     {
                         player->move_to(pos + sf::Vector2i{0, 1});
                     }
+                    player->direction = sf::Vector2i{0, 1};
                 }
                 break;
                 case sf::Keyboard::D:
@@ -427,6 +430,7 @@ std::vector<std::unique_ptr<StateTransition>> World::run(Renderer &renderer)
                     {
                         player->move_to(pos + sf::Vector2i{1, 0});
                     }
+                    player->direction = sf::Vector2i{1, 0};
                 }
                 break;
                 case sf::Keyboard::F:
