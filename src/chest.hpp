@@ -12,4 +12,6 @@ public:
     Chest(sf::Vector2i position, std::unique_ptr<Item> contents);
     
     void open(World& world);
+
+    virtual void interact(std::unique_ptr<Item>& item, World& world) override;
 };

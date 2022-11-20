@@ -55,28 +55,25 @@ void Player::put_down(World &world)
     }
 }
 
-void Player::use_item(World &world)
+void Player::interact(World &world)
 {
-    if (item != nullptr)
+    std::vector<Entity *> entities{};
+    for (Entity *ent : world.get_entities())
     {
-        std::vector<Entity *> entities{};
-        for (Entity *ent : world.get_entities())
+        if (ent->get_position() != position)
         {
-            if (ent->get_position() != position)
-            {
-                continue;
-            }
-            entities.push_back(ent);
+            continue;
         }
+        entities.push_back(ent);
+    }
 
-        if (entities.size() == 0)
-        {
-            item->use_item(nullptr, world);
-        }
-        else
-        {
-            item->use_item(entities[0], world);
-        }
+    if (entities.size() == 0)
+    {
+        return;
+    }
+    else
+    {
+        entities[0]->interact(item, world);
     }
 }
 

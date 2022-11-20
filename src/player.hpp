@@ -15,7 +15,7 @@ public:
 
     void pick_up(World& world);
     void put_down(World& world);
-    void use_item(World& world);
+    void interact(World& world);
 
     void destroy_item();
 

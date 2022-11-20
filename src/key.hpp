@@ -6,6 +6,4 @@ class Key : public Item
 {
 public:
     Key();
-
-    virtual void use_item(Entity* target, World& world) override;
 };
