@@ -1,0 +1,37 @@
+[Meta]
+Width: 7
+Height: 6
+
+[Walls]
+
+Diagram: [
+   12 8 8 8 8 8 9
+    4 0 0 0 0 0 1
+    4 0 0 0 0 0 1
+    4 0 0 0 0 0 1
+    4 0 0 0 0 0 1
+    6 2 2 2 2 2 3
+]
+
+[Entities]
+
+Goal(6, 5)
+Player(2, 5)
+Geiger(3, 5)
+Key(3, 0)
+Chest(1, 2, Treasure())
+Mimic(0, 0)
+Mimic(2, 0)
+Mimic(6, 0)
+Mimic(2, 1)
+Mimic(3, 1)
+Mimic(4, 1)
+Mimic(6, 1)
+Mimic(3, 3)
+Mimic(5, 3)
+Mimic(1, 4)
+Mimic(2, 4)
+Mimic(3, 4)
+Mimic(5, 4)
+Mimic(1, 5)
+Mimic(5, 5)

@@ -54,6 +54,10 @@ add_executable(game
     src/state_stack.cpp
     src/level_button.hpp
     src/level_button.cpp
+    src/exit_button.hpp
+    src/exit_button.cpp
+    src/sprite_entity.hpp
+    src/sprite_entity.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system sfml-audio)

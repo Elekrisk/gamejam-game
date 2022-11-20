@@ -10,11 +10,14 @@
 #include "gate.hpp"
 #include "goal.hpp"
 #include "level_button.hpp"
+#include "exit_button.hpp"
+#include "sprite_entity.hpp"
 #include "level_parser.hpp"
 #include "render_constants.hpp"
 
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 World::World() : entities{}, walls{}, player{}, camera{}, size{}, new_state{}, exit{}, replace_this{} {}
 
@@ -106,6 +109,13 @@ Camera &World::get_camera()
 void World::push_state(std::unique_ptr<State> state, bool replace_this)
 {
     new_state = std::move(state);
+    this->replace_this = replace_this;
+}
+
+void World::do_exit(int count)
+{
+    std::cout << "do exit\n";
+    exit += count;
 }
 
 sf::Vector2i World::get_size() const
@@ -305,6 +315,14 @@ Entity *create_object(World *world, File::Object &obj)
     {
         return new LevelButton{world, {x, y}, obj.params[2].int_val};
     }
+    else if (name == "ExitButton")
+    {
+        return new ExitButton{world, {x, y}};
+    }
+    else if (name == "Sprite")
+    {
+        return new SpriteEntity{world, {x, y}, obj.params[2].object_val->name};
+    }
     else
     {
         throw "what";
@@ -393,8 +411,7 @@ World World::load_level(std::string const &path)
     world.camera.position.y = height / 2.0;
     float tw = WIDTH / TILE_SIZE;
     float th = HEIGHT / TILE_SIZE;
-    float aspect = static_cast<float>(WIDTH) / HEIGHT;
-    if (width * aspect > height * aspect)
+    if (width > height)
     {
         world.camera.zoom = tw / width;
     }
@@ -485,10 +502,13 @@ std::vector<std::unique_ptr<StateTransition>> World::run(Renderer &renderer)
             }
         }
 
-        if (exit)
+        if (exit > 0)
         {
             std::vector<std::unique_ptr<StateTransition>> ret;
-            ret.emplace_back(std::make_unique<PopState>());
+            for (int i = 0; i < exit; ++i)
+            {
+                ret.emplace_back(std::make_unique<PopState>());
+            }
             return ret;
         }
         if (new_state != nullptr)

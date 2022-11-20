@@ -13,3 +13,5 @@ Diagram: [
 Player(0, 0)
 
 LevelButton(1, 1, 1)
+LevelButton(2, 1, 2)
+LevelButton(3, 1, 3)

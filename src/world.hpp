@@ -16,7 +16,7 @@ class World : public State
 
     std::unique_ptr<State> new_state;
     bool replace_this;
-    bool exit;
+    int exit;
 
 public:
     World();
@@ -32,7 +32,7 @@ public:
     Camera &get_camera();
 
     void push_state(std::unique_ptr<State> state, bool replace_this);
-    void do_exit();
+    void do_exit(int count = 1);
 
     sf::Vector2i get_size() const;
 

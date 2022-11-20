@@ -1,6 +1,7 @@
 #include "goal.hpp"
 #include "treasure.hpp"
 #include "asset_manager.hpp"
+#include "world.hpp"
 
 #include <iostream>
 
@@ -14,6 +15,7 @@ void Goal::interact(std::unique_ptr<Item> &item)
     if (treasure != nullptr)
     {
         std::cout << "You win! :D\n";
-        treasure = nullptr;
+        item = nullptr;
+        world->push_state(std::make_unique<World>(World::load_level("assets/you_win.txt")), true);
     }
 }

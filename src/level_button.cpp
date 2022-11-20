@@ -2,15 +2,14 @@
 #include "asset_manager.hpp"
 #include <sstream>
 #include "world.hpp"
+#include "concat.hpp"
 
-std::string concat(std::string str, int level, std::string after)
+
+
+LevelButton::LevelButton(World *world, sf::Vector2i position, int level) : Entity{world, position, asset_manager.load<sf::Texture>(concat("assets/level", level, ".png"))}, level{level}
 {
-    std::stringstream ss{};
-    ss << str << level << after;
-    return ss.str();
+    obstructs = true;
 }
-
-LevelButton::LevelButton(World *world, sf::Vector2i position, int level) : Entity{world, position, asset_manager.load<sf::Texture>(concat("assets/level", level, ".png"))}, level{level} {}
 
 void LevelButton::interact(std::unique_ptr<Item> &)
 {

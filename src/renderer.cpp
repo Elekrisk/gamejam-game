@@ -30,16 +30,6 @@ void Renderer::render(World &world)
     sf::Vector2i map_size = world.get_size();
     background.setTextureRect({0, 0, TILE_SIZE * map_size.x, TILE_SIZE * map_size.y });
     view.draw(background);
-    for (Entity *ent : world.get_entities())
-    {
-        // sf::Sprite &sprite = ent->get_sprite();
-        // sf::Vector2f pos = static_cast<sf::Vector2f>(ent->get_position());
-        // sprite.setPosition(pos * TILE_SIZE * SCALE);
-        // sprite.setScale({SCALE, SCALE});
-
-        // window.draw(sprite);
-        ent->draw(view);
-    }
     for (Wall const &wall : world.get_walls())
     {
         // sf::RectangleShape rect{{TILE_SIZE / 8.0, TILE_SIZE}};
@@ -88,6 +78,16 @@ void Renderer::render(World &world)
         }
         rect.setFillColor(sf::Color::Black);
         view.draw(rect);
+    }
+    for (Entity *ent : world.get_entities())
+    {
+        // sf::Sprite &sprite = ent->get_sprite();
+        // sf::Vector2f pos = static_cast<sf::Vector2f>(ent->get_position());
+        // sprite.setPosition(pos * TILE_SIZE * SCALE);
+        // sprite.setScale({SCALE, SCALE});
+
+        // window.draw(sprite);
+        ent->draw(view);
     }
     once = false;
     window.display();
