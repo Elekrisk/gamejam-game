@@ -1,13 +1,18 @@
 #include "entity.hpp"
 
-Entity::Entity(sf::Vector2i position, sf::Texture const *texture)
-    : Sprite{texture}, position{position}
+Entity::Entity(World* world, sf::Vector2i position, sf::Texture const *texture)
+    : Sprite{texture}, world{world}, position{position}
 {
 }
 
 sf::Vector2i Entity::get_position() const
 {
     return position;
+}
+
+void Entity::update_world_pointer(World* world)
+{
+    this->world = world;
 }
 
 void Entity::move_to(sf::Vector2i target)

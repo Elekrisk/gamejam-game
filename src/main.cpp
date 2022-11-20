@@ -68,17 +68,17 @@ int main()
                 break;
                 case sf::Keyboard::F:
                 {
-                    player->pick_up(world);
+                    player->pick_up();
                 }
                 break;
                 case sf::Keyboard::G:
                 {
-                    player->put_down(world);
+                    player->put_down();
                 }
                 break;
                 case sf::Keyboard::E:
                 {
-                    player->interact(world);
+                    player->interact();
                 }
                 break;
                 default:

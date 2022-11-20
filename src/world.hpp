@@ -15,7 +15,10 @@ class World
 public:
     
     World();
+    World(World const& world) = delete;
+    World(World&& world);
     ~World();
+    // World& operator=(World&& world);
     void add_entity(Entity* entity);
     void kill_entity(Entity* entity);
     std::vector<Entity*> const& get_entities() const;

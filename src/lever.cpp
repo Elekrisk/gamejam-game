@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-Lever::Lever(sf::Vector2i position, int circuit_id) : Entity{position, asset_manager.load<sf::Texture>("assets/lever_right.png")}, circuit_id{circuit_id} {}
+Lever::Lever(World* world, sf::Vector2i position, int circuit_id) : Entity{world, position, asset_manager.load<sf::Texture>("assets/lever_right.png")}, circuit_id{circuit_id} {}
 
 void Lever::interact(std::unique_ptr<Item> &, World &world)
 {

@@ -4,8 +4,8 @@
 
 sf::Texture const EMPTY{};
 
-Mimic::Mimic(sf::Vector2i position)
-: Entity(position, &EMPTY)
+Mimic::Mimic(World* world, sf::Vector2i position)
+: Entity(world, position, &EMPTY)
 {
     sf::Texture *texture{asset_manager.load<sf::Texture>("assets/chest.png")};
     sprite.setTexture(*texture, true);

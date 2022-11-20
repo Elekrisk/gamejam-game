@@ -1,8 +1,8 @@
 #include "gate.hpp"
 #include "render_constants.hpp"
 
-Gate::Gate(sf::Vector2i position, Wall::Direction direction, int circuit_id, bool open)
-    : Entity{position, nullptr},
+Gate::Gate(World* world, sf::Vector2i position, Wall::Direction direction, int circuit_id, bool open)
+    : Entity{world, position, nullptr},
       direction{direction},
       circuit_id{circuit_id},
       open{open}

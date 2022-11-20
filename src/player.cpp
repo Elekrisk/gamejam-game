@@ -13,36 +13,36 @@
 // {
 // }
 
-float Player::closest_mimic(World* world)
+float Player::closest_mimic()
 {
     float smallest_distance{INFINITY};
-    for ( Entity* ent : world->get_entities())
+    for (Entity *ent : world->get_entities())
     {
-        if (dynamic_cast<Mimic*>(ent) != nullptr)
+        if (dynamic_cast<Mimic *>(ent) != nullptr)
         {
             sf::Vector2f diff = sf::Vector2f{ent->get_position() - position};
-            float length = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+            float length = diff.x * diff.x + diff.y * diff.y;
             if (length < smallest_distance)
             {
                 smallest_distance = length;
             }
         }
-    } 
-    return smallest_distance;
+    }
+    return std::sqrt(smallest_distance);
 }
 
 sf::Texture const EMPTY{};
 
-Player::Player(sf::Vector2i position, World* world) : Entity{position, &EMPTY}, world{world}
+Player::Player(World *world, sf::Vector2i position) : Entity{world, position, &EMPTY}
 {
     sf::Texture *texture{asset_manager.load<sf::Texture>("assets/player.png")};
     sprite.setTexture(*texture, true);
 }
 
-void Player::pick_up(World &world)
+void Player::pick_up()
 {
     std::vector<Item_Entity *> items{};
-    for (Entity *ent : world.get_entities())
+    for (Entity *ent : world->get_entities())
     {
         if (ent->get_position() != position)
         {
@@ -62,27 +62,39 @@ void Player::pick_up(World &world)
 
     if (item != nullptr)
     {
-        put_down(world);
+        put_down();
     }
 
     item = items[0]->steal_item();
-    world.kill_entity(items[0]);
+
+    Geiger *geiger = dynamic_cast<Geiger *>(&*item);
+    if (geiger != nullptr)
+    {
+        geiger->update(closest_mimic());
+    }
+
+    world->kill_entity(items[0]);
 }
 
-void Player::put_down(World &world)
+void Player::put_down()
 {
     if (item != nullptr)
     {
-        world.add_entity(new Item_Entity{position, std::move(item)});
+        Geiger *geiger = dynamic_cast<Geiger *>(&*item);
+        if (geiger != nullptr)
+        {
+            geiger->update(INFINITY);
+        }
+        world->add_entity(new Item_Entity{world, position, std::move(item)});
     }
 }
 
-void Player::interact(World &world)
+void Player::interact()
 {
     std::vector<Entity *> entities{};
-    for (Entity *ent : world.get_entities())
+    for (Entity *ent : world->get_entities())
     {
-        if (ent->get_position() != position || dynamic_cast<Player*>(ent) != nullptr)
+        if (ent->get_position() != position || dynamic_cast<Player *>(ent) != nullptr)
         {
             continue;
         }
@@ -91,7 +103,7 @@ void Player::interact(World &world)
 
     for (Entity *ent : entities)
     {
-        ent->interact(item, world);
+        ent->interact(item, *world);
     }
 }
 
@@ -109,10 +121,10 @@ void Player::draw(RenderView &view)
 void Player::move_to(sf::Vector2i target)
 {
     Entity::move_to(target);
-    Geiger* geiger = dynamic_cast<Geiger*>(&*item);
+    Geiger *geiger = dynamic_cast<Geiger *>(&*item);
     if (geiger != nullptr)
     {
-        geiger->update(closest_mimic(world));
+        geiger->update(closest_mimic());
     }
 }
 void Player::destroy_item()

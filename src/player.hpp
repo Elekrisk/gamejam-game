@@ -6,19 +6,18 @@
 class Player : public Entity
 {
     std::unique_ptr<Item> item;
-    World* world;
 
-    Player(sf::Vector2i position, sf::Texture&& texture);
+    Player(World* world, sf::Vector2i position, sf::Texture&& texture);
 
-    float closest_mimic(World* world);
+    float closest_mimic();
 
 public:
-    Player(sf::Vector2i position, World* world);
+    Player(World *world, sf::Vector2i position);
     ~Player() = default;
 
-    void pick_up(World& world);
-    void put_down(World& world);
-    void interact(World& world);
+    void pick_up();
+    void put_down();
+    void interact();
 
     void destroy_item();
 

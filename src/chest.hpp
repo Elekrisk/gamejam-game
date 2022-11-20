@@ -9,7 +9,7 @@ class Chest : public Entity
     bool open_;
 
 public:
-    Chest(sf::Vector2i position, std::unique_ptr<Item> contents);
+    Chest(World* world, sf::Vector2i position, std::unique_ptr<Item> contents);
     
     void open(World& world);
 

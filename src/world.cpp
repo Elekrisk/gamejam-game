@@ -8,6 +8,7 @@
 #include "treasure.hpp"
 #include "lever.hpp"
 #include "gate.hpp"
+#include "goal.hpp"
 #include "level_parser.hpp"
 #include "render_constants.hpp"
 
@@ -15,6 +16,18 @@
 #include <sstream>
 
 World::World() : entities{}, walls{}, player{}, camera{} {}
+
+World::World(World &&world)
+    : entities{std::move(world.entities)},
+      walls{std::move(world.walls)},
+      player{std::move(world.player)},
+      camera{std::move(world.camera)}
+{
+    for (Entity *ent : entities)
+    {
+        ent->update_world_pointer(this);
+    }
+}
 
 World::~World()
 {
@@ -167,34 +180,34 @@ std::unique_ptr<Item> create_item(File::Object &&obj)
 {
     return create_item(obj);
 }
-Entity *create_object(File::Object &obj, World* world)
+Entity *create_object(World *world, File::Object &obj)
 {
     int x = obj.params[0].int_val;
     int y = obj.params[1].int_val;
     std::string &name = obj.name;
     if (name == "Player")
     {
-        return new Player{{x, y}, world};
+        return new Player{world, {x, y}};
     }
     else if (name == "Geiger")
     {
-        return new Item_Entity{{x, y}, create_item({"Geiger", {}})};
+        return new Item_Entity{world, {x, y}, create_item({"Geiger", {}})};
     }
     else if (name == "Mimic")
     {
-        return new Mimic{{x, y}};
+        return new Mimic{world, {x, y}};
     }
     else if (name == "Key")
     {
-        return new Item_Entity{{x, y}, create_item({"Key", {}})};
+        return new Item_Entity{world, {x, y}, create_item({"Key", {}})};
     }
     else if (name == "Chest")
     {
-        return new Chest{{x, y}, create_item(*obj.params[2].object_val)};
+        return new Chest{world, {x, y}, create_item(*obj.params[2].object_val)};
     }
     else if (name == "Lever")
     {
-        return new Lever({x, y}, obj.params[2].int_val);
+        return new Lever(world, {x, y}, obj.params[2].int_val);
     }
     else if (name == "Gate")
     {
@@ -249,16 +262,20 @@ Entity *create_object(File::Object &obj, World* world)
                 throw "what";
             }
         }
-        return new Gate{{x, y}, dir, circuit_id, open};
+        return new Gate{world, {x, y}, dir, circuit_id, open};
+    }
+    else if (name == "Goal")
+    {
+        return new Goal{world, {x, y}};
     }
     else
     {
         throw "what";
     }
 }
-Entity *create_object(File::Object &&obj)
+Entity *create_object(World* world, File::Object &&obj)
 {
-    return create_object(obj);
+    return create_object(world, obj);
 }
 
 World World::load_level(std::string const &path)
@@ -330,7 +347,7 @@ World World::load_level(std::string const &path)
         {
             for (File::Object &obj : part.objects)
             {
-                world.add_entity(create_object(obj, &world));
+                world.add_entity(create_object(&world, obj));
             }
         }
     }
