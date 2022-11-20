@@ -5,6 +5,8 @@ project(gamejam-game)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Debug)
 
+set(CMAKE_COLOR_DIAGNOSTICS true)
+
 add_executable(game
     src/main.cpp
     src/entity.hpp
@@ -46,6 +48,8 @@ add_executable(game
     src/lever.cpp
     src/gate.hpp
     src/gate.cpp
+    src/goal.hpp
+    src/goal.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system sfml-audio)
