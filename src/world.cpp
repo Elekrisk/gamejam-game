@@ -5,6 +5,7 @@
 #include "mimic.hpp"
 #include "chest.hpp"
 #include "key.hpp"
+#include "treasure.hpp"
 #include "level_parser.hpp"
 #include "render_constants.hpp"
 
@@ -121,7 +122,12 @@ std::unique_ptr<Item> create_item(File::Object &obj)
     {
         return std::make_unique<Geiger>();
     }
-    else {
+    else if (name == "Treasure")
+    {
+        return std::make_unique<Treasure>();
+    }
+    else
+    {
         throw "what";
     }
 }

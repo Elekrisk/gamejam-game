@@ -40,6 +40,8 @@ add_executable(game
     src/chest.cpp
     src/camera.hpp
     src/camera.cpp
+    src/treasure.hpp
+    src/treasure.cpp
 )
 
 target_link_libraries(game sfml-graphics sfml-window sfml-system)

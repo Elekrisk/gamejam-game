@@ -16,7 +16,7 @@ Diagram: [
 
 [Entities]
 Mimic(4, 3)
-Chest(4, 1, Geiger())
+Chest(4, 1, Treasure())
 Player(0, 3)
 Geiger(1, 3)
 Key(1, 1)
