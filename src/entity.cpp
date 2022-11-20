@@ -26,3 +26,7 @@ void Entity::draw(RenderView &view)
 void Entity::interact(std::unique_ptr<Item> &item, World &world)
 {
 }
+
+void Entity::toggle_circuit(int id)
+{
+}
