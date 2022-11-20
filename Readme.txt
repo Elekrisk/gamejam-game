@@ -5,7 +5,7 @@
 Exlore caves to find treasure! 
 But watch out, only one chest is real;
 the rest are radioactive mutant mimics!
-Use the geiger-counter to figure out which
+Use the Geiger counter to figure out which
 chest is the real one
 
 --- C O N T R O L S ---

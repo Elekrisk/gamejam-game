@@ -33,7 +33,7 @@ float Player::closest_mimic()
 
 sf::Texture const EMPTY{};
 
-Player::Player(World *world, sf::Vector2i position) : Entity{world, position, &EMPTY}, indicator{}
+Player::Player(World *world, sf::Vector2i position) : Entity{world, position, &EMPTY}, indicator{}, direction{0, 1}
 {
     sf::Texture *texture{asset_manager.load<sf::Texture>("assets/player.png")};
     sf::Texture *indicator_texture{asset_manager.load<sf::Texture>("assets/indicator.png")};
