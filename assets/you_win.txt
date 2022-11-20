@@ -1,0 +1,16 @@
+[Meta]
+Width: 3
+Height: 3
+
+[Walls]
+Diagram: [
+   12 8 9
+    4 0 1
+    6 2 3
+]
+
+[Entities]
+Sprite(0, 0, you())
+Sprite(2, 0, won())
+Player(1, 0)
+ExitButton(1, 1)
