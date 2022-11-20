@@ -60,20 +60,16 @@ void Player::interact(World &world)
     std::vector<Entity *> entities{};
     for (Entity *ent : world.get_entities())
     {
-        if (ent->get_position() != position)
+        if (ent->get_position() != position || dynamic_cast<Player*>(ent) != nullptr)
         {
             continue;
         }
         entities.push_back(ent);
     }
 
-    if (entities.size() == 0)
+    for (Entity *ent : entities)
     {
-        return;
-    }
-    else
-    {
-        entities[0]->interact(item, world);
+        ent->interact(item, world);
     }
 }
 
