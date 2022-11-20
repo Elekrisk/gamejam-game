@@ -60,12 +60,14 @@ struct File
         enum class Kind
         {
             Integer,
-            Object
+            Object,
+            List
         };
 
         Kind kind;
         int int_val;
         std::unique_ptr<File::Object> object_val;
+        std::vector<Value> list_val;
     };
 
     struct Object
@@ -77,14 +79,14 @@ struct File
     struct Property
     {
         std::string name;
-        int value;
+        File::Value value;
     };
 
     struct Part
     {
         std::string title;
         std::vector<Object> objects;
-        std::map<std::string, int> properties;
+        std::map<std::string, File::Value> properties;
     };
 
     std::vector<Part> parts;

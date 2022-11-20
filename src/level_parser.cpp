@@ -94,10 +94,34 @@ Parser::Parser(std::vector<Token> const &tokens) : tokens{tokens}, index{0} {}
 
 bool Parser::parse_value(File::Value &value)
 {
+    int start = index;
     if (tokens[index].kind == TokenKind::Integer)
     {
         value.kind = File::Value::Kind::Integer;
         value.int_val = tokens[index++].int_val;
+        return true;
+    }
+    else if (tokens[index].kind == TokenKind::LBracket)
+    {
+        index++;
+        std::vector<File::Value> values{};
+        while (tokens[index].kind != TokenKind::RBracket)
+        {
+            File::Value value;
+            if (!parse_value(value))
+            {
+                index = start;
+                return false;
+            }
+            values.push_back(std::move(value));
+            if (tokens[index].kind == TokenKind::Comma)
+            {
+                index++;
+            }
+        }
+        index++;
+        value.kind = File::Value::Kind::List;
+        value.list_val = std::move(values);
         return true;
     }
     else
@@ -152,7 +176,7 @@ bool Parser::parse_object(File::Object &obj)
 bool Parser::parse_property(File::Property &prop)
 {
     std::string name;
-    int val;
+    File::Value val;
     int start = index;
     if (tokens[index].kind != TokenKind::Word)
     {
@@ -165,14 +189,13 @@ bool Parser::parse_property(File::Property &prop)
         index = start;
         return false;
     }
-    if (tokens[index].kind != TokenKind::Integer)
+    if (!parse_value(val))
     {
         index = start;
         return false;
     }
-    val = tokens[index++].int_val;
     prop.name = std::move(name);
-    prop.value = val;
+    prop.value = std::move(val);
     return true;
 }
 
@@ -187,7 +210,7 @@ bool Parser::parse_line(File::Part &current_part)
     File::Property prop;
     if (parse_property(prop))
     {
-        current_part.properties.emplace(prop.name, prop.value);
+        current_part.properties.emplace(prop.name, std::move(prop.value));
         return true;
     }
     return false;
