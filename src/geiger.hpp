@@ -4,8 +4,7 @@
 class Geiger : public Item
 {
     sf::Sound count;
-    float get_closest();
 public:
     Geiger();
-    void update();
+    void update(float dist);
 };

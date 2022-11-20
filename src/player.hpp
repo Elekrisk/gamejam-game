@@ -6,11 +6,14 @@
 class Player : public Entity
 {
     std::unique_ptr<Item> item;
+    World* world;
 
     Player(sf::Vector2i position, sf::Texture&& texture);
 
+    float closest_mimic(World* world);
+
 public:
-    Player(sf::Vector2i position);
+    Player(sf::Vector2i position, World* world);
     ~Player() = default;
 
     void pick_up(World& world);

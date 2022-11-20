@@ -11,12 +11,7 @@ Geiger::Geiger()
 }
 
 
-void Geiger::update()
+void Geiger::update(float dist)
 {
-    count.setPitch(get_closest());
-}
-
-float Geiger::get_closest()
-{
-    return 2.0f;
+    count.setPitch(10-dist);
 }

@@ -4,15 +4,36 @@
 #include "item_entity.hpp"
 #include "geiger.hpp"
 #include "item.hpp"
+#include "mimic.hpp"
+
+#include <cmath>
 
 // Player::Player(sf::Vector2i position, sf::Texture &&texture)
 //     : Entity{position, texture}
 // {
 // }
 
+float Player::closest_mimic(World* world)
+{
+    float smallest_distance{INFINITY};
+    for ( Entity* ent : world->get_entities())
+    {
+        if (dynamic_cast<Mimic*>(ent) != nullptr)
+        {
+            sf::Vector2f diff = sf::Vector2f{ent->get_position() - position};
+            float length = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+            if (length < smallest_distance)
+            {
+                smallest_distance = length;
+            }
+        }
+    } 
+    return smallest_distance;
+}
+
 sf::Texture const EMPTY{};
 
-Player::Player(sf::Vector2i position) : Entity{position, &EMPTY}
+Player::Player(sf::Vector2i position, World* world) : Entity{position, &EMPTY}, world{world}
 {
     sf::Texture *texture{asset_manager.load<sf::Texture>("assets/player.png")};
     sprite.setTexture(*texture, true);
@@ -91,7 +112,7 @@ void Player::move_to(sf::Vector2i target)
     Geiger* geiger = dynamic_cast<Geiger*>(&*item);
     if (geiger != nullptr)
     {
-        geiger->update();
+        geiger->update(closest_mimic(world));
     }
 }
 void Player::destroy_item()

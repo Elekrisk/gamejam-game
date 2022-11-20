@@ -167,14 +167,14 @@ std::unique_ptr<Item> create_item(File::Object &&obj)
 {
     return create_item(obj);
 }
-Entity *create_object(File::Object &obj)
+Entity *create_object(File::Object &obj, World* world)
 {
     int x = obj.params[0].int_val;
     int y = obj.params[1].int_val;
     std::string &name = obj.name;
     if (name == "Player")
     {
-        return new Player{{x, y}};
+        return new Player{{x, y}, world};
     }
     else if (name == "Geiger")
     {
@@ -330,7 +330,7 @@ World World::load_level(std::string const &path)
         {
             for (File::Object &obj : part.objects)
             {
-                world.add_entity(create_object(obj));
+                world.add_entity(create_object(obj, &world));
             }
         }
     }
